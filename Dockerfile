@@ -1,11 +1,14 @@
-FROM maven:3.9.6-openjdk-21 AS Builder
-WORKDIR ./src ./src
-COPY ./pom.xml .
-RUN mvn clean package
+# Use official OpenJDK 17 as base image
+FROM adoptopenjdk:21-jdk-hotspot
 
+# Set the working directory in the container
+WORKDIR /app
 
-FROM openjdk:21-jdk-alpine
-VOLUME /tmp
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Copy the packaged Spring Boot application JAR file into the container
+COPY target/your-application.jar /app/your-application.jar
+
+# Expose the port the application runs on
+EXPOSE 8080
+
+# Run the Spring Boot application when the container starts
+CMD ["java", "-jar", "your-application.jar"]
