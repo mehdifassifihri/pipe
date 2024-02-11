@@ -1,12 +1,14 @@
-FROM maven:3.8.4-openjdk-17 AS builder
-WORKDIR /app
-COPY ./src ./src
-COPY ./pom.xml .
-RUN mvn clean package
+# Use OpenJDK 17 as the base image
+FROM adoptopenjdk/openjdk17:alpine-jre
 
-FROM openjdk:17-jdk-alpine
-VOLUME /tmp
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} client-service.jar
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the packaged jar file into the container at the defined working directory
+COPY target/your-spring-boot-app.jar /app/your-spring-boot-app.jar
+
+# Expose the port that the Spring Boot application will run on
 EXPOSE 8085
-ENTRYPOINT ["java","-jar","/client-service.jar"]
+
+# Specify the command to run your Spring Boot application
+CMD ["java", "-jar", "your-spring-boot-app.jar"]
